@@ -3,7 +3,7 @@ from sklearn.linear_model import LinearRegression
 import feedparser
 
 st.sidebar.title("🎶 Danh sách nghệ sĩ")
-selected_artist = st.sidebar.radio("Chọn nghệ sĩ:", ["Đen Vâu", "Hà Anh Tuấn", "Sơn Tùng M-TP"])
+selected_artist = st.sidebar.radio("Chọn nghệ sĩ:", ["Đen Vâu", "Hà Anh Tuấn", "Sơn Tùng M-TP", "Những bản nhạc giúp tâm trạng vui vẻ hơn"])
 
 videos = {
     "Đen Vâu": [
