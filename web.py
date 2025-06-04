@@ -82,3 +82,14 @@ with tab3:
         st.subheader(entry.title)
         st.write(entry.published)
         st.write(entry.link)
+with tab4:
+    st.header("💰 Giá vàng mới nhất từ giavang.org")
+
+    gold_feed = feedparser.parse("https://giavang.org/rss/gia-vang/")
+    if gold_feed.entries:
+        for entry in gold_feed.entries[:5]:
+            st.subheader(entry.title)
+            st.write(entry.published)
+            st.write(entry.link)
+    else:
+        st.warning("Không thể tải dữ liệu từ nguồn giavang.org.")
