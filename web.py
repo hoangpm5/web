@@ -84,54 +84,15 @@ with tab3:
         st.write(entry.link)
 # Tab 4: Giá vàng
 with tab4:
-    st.header("💰 Cập nhật giá vàng trong nước và thế giới")
+    st.header("💰 Cập nhật giá vàng từ Vietnamnet")
 
-    # Lấy bản tin từ Vietnamnet
     feed = feedparser.parse("https://vietnamnet.vn/rss/kinh-doanh.rss")
     gold_news = [entry for entry in feed.entries if "vàng" in entry.title.lower() or "giá vàng" in entry.summary.lower()]
 
-    displayed = False
-    gia_vang_trong_nuoc = None
-
-    for entry in gold_news:
-        st.subheader(entry.title)
-        st.write(entry.published)
-        st.write(f"[Đọc chi tiết]({entry.link})")
-        
-        # Tìm giá vàng trong nội dung
-        match = re.search(r"(\d{2,3}[.,]?\d{3})\s?(triệu|nghìn)?", entry.title + entry.summary)
-        if match and not gia_vang_trong_nuoc:
-            raw = match.group(1).replace(".", "").replace(",", "")
-            try:
-                value = int(raw)
-                if value > 30_000_000:  # Có thể là giá vàng
-                    gia_vang_trong_nuoc = value
-            except:
-                pass
-        displayed = True
-
-        if displayed:
-            break  # Hiện 1 bản tin đầu tiên
-
-    # Hiển thị giá thế giới và tính chênh lệch
-    gia_vang_the_gioi_usd = 2350  # Ví dụ: 2.350 USD/ounce (cập nhật thủ công hoặc qua API nếu có)
-    ty_gia = 24000
-    gia_vang_the_gioi_vnd = gia_vang_the_gioi_usd * ty_gia * 0.829  # 1 ounce ≈ 0.829 lượng vàng
-
-    st.markdown("---")
-    st.subheader("📊 So sánh giá vàng:")
-
-    if gia_vang_trong_nuoc:
-        st.success(f"🏠 Giá vàng trong nước: **{gia_vang_trong_nuoc:,.0f} VNĐ/lượng**")
+    if gold_news:
+        for entry in gold_news[:5]:  # Hiện 5 bài gần nhất
+            st.subheader(entry.title)
+            st.write(entry.published)
+            st.write(entry.link)
     else:
-        st.warning("Không lấy được giá vàng trong nước từ tin tức.")
-
-    st.info(f"🌍 Giá vàng thế giới quy đổi: **{gia_vang_the_gioi_vnd:,.0f} VNĐ/lượng**")
-
-    if gia_vang_trong_nuoc:
-        chenh_lech = gia_vang_trong_nuoc - gia_vang_the_gioi_vnd
-        st.write(f"📈 Mức chênh lệch: **{chenh_lech:,.0f} VNĐ/lượng**")
-        if chenh_lech > 0:
-            st.warning("💰 Giá trong nước cao hơn thế giới.")
-        else:
-            st.success("✅ Giá trong nước thấp hơn hoặc ngang với thế giới.")
+        st.warning("Không tìm thấy bản tin giá vàng gần đây.")
